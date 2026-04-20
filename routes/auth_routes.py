@@ -1,7 +1,7 @@
 # auth_routes.py
 
 from flask import Blueprint, request, jsonify
-from crm_api.models.db import mysql
+from models.db import mysql
 import hashlib
 
 # ── Blueprint ────────────────────────────────────────────────────────────────

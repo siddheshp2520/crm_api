@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from crm_api.models.db import mysql
+from models.db import mysql  
 
 employee_bp = Blueprint('employee_bp', __name__)
 
