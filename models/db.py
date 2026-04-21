@@ -1,45 +1,41 @@
-# crm_api/models/db.py
+# models/db.py
 
 from flask_mysqldb import MySQL
 
-# ── MySQL Object ──────────────────────────────────────────────────────────────
 mysql = MySQL()
 
 
 def init_db(app):
-    """Initialize MySQL with Flask app."""
+    """Initialize MySQL with Flask app"""
     mysql.init_app(app)
 
 
 def get_cursor():
-    """Get a fresh database cursor."""
-    return mysql.connection.cursor()
+    """Get DB cursor safely"""
+    try:
+        return mysql.connection.cursor()
+    except Exception as e:
+        raise Exception("Database connection failed")
 
 
 def commit():
-    """Commit pending changes to database."""
     mysql.connection.commit()
 
 
-def close_cursor(cursor):
-    """Close cursor safely."""
-    if cursor:
-        cursor.close()
-
-
 def rollback():
-    """Rollback on error."""
     try:
         mysql.connection.rollback()
     except Exception:
         pass
 
 
+def close_cursor(cursor):
+    if cursor:
+        cursor.close()
+
+
 def execute_query(query, params=None):
-    """
-    Run a query and return all rows.
-    Use for SELECT statements.
-    """
+    """SELECT queries"""
     cursor = None
     try:
         cursor = get_cursor()
@@ -52,10 +48,7 @@ def execute_query(query, params=None):
 
 
 def execute_commit(query, params=None):
-    """
-    Run a query and commit.
-    Use for INSERT / UPDATE / DELETE statements.
-    """
+    """INSERT / UPDATE / DELETE"""
     cursor = None
     try:
         cursor = get_cursor()
